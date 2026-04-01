@@ -5,34 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Agenda de Contactos</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
-  <h1>Agenda de Contactos</h1>
+  <h1>
+    <i class="fa-regular fa-calendar-check"></i>
+    Agenda de Contactos
+  </h1>
 
   <div class="toolbar">
-    <input type="text" id="search" placeholder="Buscar por nombre..." />
-    <button id="btn-nuevo">+ Nuevo Contacto</button>
+    <input type="text" id="search" placeholder="Buscar por nombre, teléfono o email..." />
+    <button id="btn-nuevo">
+      <i class="fa-solid fa-plus"></i> Nuevo Contacto
+    </button>
   </div>
+
+  <p id="contact-count" class="contact-count"></p>
 
   <div id="contacts-grid" class="grid"></div>
 
-  <!-- Modal -->
- <div id="modal" class="modal-overlay hidden">
-  <div class="modal">
-    <h2 id="modal-title">Nuevo Contacto</h2>
-    <input type="text" id="input-name" placeholder="Nombre completo" />
-    <input type="text" id="input-phone" placeholder="Teléfono" />
-    <input type="email" id="input-email" placeholder="Email (opcional)" />
-    <div class="modal-buttons">
-      <button id="btn-cancel">Cancelar</button>
-      <button id="btn-save">Guardar</button>
+  <div id="modal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2 id="modal-title">Nuevo Contacto</h2>
+      <input type="text" id="input-name" placeholder="Nombre completo" />
+      <input type="text" id="input-phone" placeholder="Teléfono" />
+      <input type="email" id="input-email" placeholder="Email (opcional)" />
+      <div class="modal-buttons">
+        <button id="btn-cancel">Cancelar</button>
+        <button id="btn-save">Guardar</button>
+      </div>
     </div>
   </div>
- </div>
- 
-
-
 
   <script src="app.js"></script>
 </body>
-</html>
+</html> 

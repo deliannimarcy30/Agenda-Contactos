@@ -15,18 +15,27 @@ h1 {
   text-align: center;
   margin-bottom: 25px;
   font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+h1 i {
+  font-size: 1.8rem;
+  color: #4fc3f7;
 }
 
 .toolbar {
   display: flex;
   justify-content: center;
   gap: 15px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 .toolbar input {
   padding: 10px 15px;
-  width: 300px;
+  width: 350px;
   border-radius: 8px;
   border: 1px solid #444;
   background-color: #2a2a2a;
@@ -47,10 +56,20 @@ h1 {
   font-size: 1rem;
   cursor: pointer;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 #btn-nuevo:hover {
-  background-color: #dddddd;
+  background-color: #d5ebf3;
+}
+
+.contact-count {
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 25px;
 }
 
 .grid {
@@ -65,6 +84,14 @@ h1 {
   padding: 20px;
   position: relative;
   cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-top: 4px solid transparent;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(234, 240, 242, 0.372);
 }
 
 .card-header {
@@ -115,6 +142,14 @@ h1 {
 
 .btn-delete:hover {
   color: #ff4444;
+}
+
+.empty-message {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  margin-top: 50px;
+  grid-column: 1 / -1;
 }
 
 .modal-overlay {
@@ -180,7 +215,7 @@ h1 {
 }
 
 #btn-cancel:hover {
-  background-color: #555;
+  background-color: #4c4c4d;
 }
 
 #btn-save {
@@ -189,10 +224,9 @@ h1 {
 }
 
 #btn-save:hover {
-  background-color: #dddddd;
+  background-color: #d1e7f2;
 }
 
 .hidden {
   display: none !important;
 }
-
