@@ -111,3 +111,13 @@ function openEditModal(contact) {
   document.getElementById('input-email').value = contact.email || '';
   document.getElementById('modal').classList.remove('hidden');
 }
+
+async function deleteContact(id) {
+  if (confirm('¿Estás segura de que deseas eliminar este contacto?')) {
+    await fetch(`${API}/${id}`, {
+      method: 'DELETE'
+    });
+    loadContacts();
+  }
+}
+
