@@ -81,10 +81,18 @@ document.getElementById('btn-save').addEventListener('click', async () => {
   const phone = document.getElementById('input-phone').value.trim();
   const email = document.getElementById('input-email').value.trim();
 
+  
   if (!name || !phone) {
     alert('Nombre y teléfono son obligatorios');
     return;
   }
+
+  const phoneRegex = /^[0-9+\-\s()]{7,20}$/;
+  if (!phoneRegex.test(phone)) {
+    alert('El teléfono solo puede contener números, espacios, +, - y paréntesis. Mínimo 7 dígitos.');
+    return;
+  }
+
 
   if (editingId) {
     await fetch(`${API}/${editingId}`, {
