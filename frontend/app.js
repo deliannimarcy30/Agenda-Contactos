@@ -1,10 +1,9 @@
 const API = 'http://localhost:3000/api/contacts';
 
-const colors = ['#f4845f', '#f7c948', '#4fc3f7', '#81c784', '#f48fb1', '#ce93d8'];
+const colors = ['#f69a7b', '#f9db88', '#90c8f8', '#a7fcab', '#f8a4c0', '#e999f7'];
 
-function getColor(name) {
-  const index = name.charCodeAt(0) % colors.length;
-  return colors[index];
+function getColor(id) {
+  return colors[id % colors.length];
 }
 
 function getInitial(name) {
@@ -23,17 +22,25 @@ async function loadContacts(search = '') {
     );
   }
 
-
   const grid = document.getElementById('contacts-grid');
+  const count = document.getElementById('contact-count');
   grid.innerHTML = '';
 
+  count.textContent = `${contacts.length} contacto${contacts.length !== 1 ? 's' : ''} encontrado${contacts.length !== 1 ? 's' : ''}`;
+
+  if (contacts.length === 0) {
+    grid.innerHTML = '<p class="empty-message">No se encontraron contactos</p>';
+    return;
+  }
+
   contacts.forEach(contact => {
-    const color = getColor(contact.name);
+    const color = getColor(contact.id);
     const card = document.createElement('div');
     card.className = 'card';
     card.dataset.id = contact.id;
+    card.style.borderTopColor = color;
     card.innerHTML = `
-      <button class="btn-delete" onclick="deleteContact(${contact.id})">x</button>
+      <button class="btn-delete" onclick="deleteContact(${contact.id})">✕</button>
       <div class="card-header">
         <div class="avatar" style="background-color:${color}">
           ${getInitial(contact.name)}
@@ -58,8 +65,6 @@ document.getElementById('btn-nuevo').addEventListener('click', () => {
   openCreateModal();
 });
 
-loadContacts();
-
 let editingId = null;
 
 function openCreateModal() {
@@ -71,17 +76,24 @@ function openCreateModal() {
   document.getElementById('modal').classList.remove('hidden');
 }
 
+function openEditModal(contact) {
+  editingId = contact.id;
+  document.getElementById('modal-title').textContent = 'Editar Contacto';
+  document.getElementById('input-name').value = contact.name;
+  document.getElementById('input-phone').value = contact.phone;
+  document.getElementById('input-email').value = contact.email || '';
+  document.getElementById('modal').classList.remove('hidden');
+}
+
 document.getElementById('btn-cancel').addEventListener('click', () => {
   document.getElementById('modal').classList.add('hidden');
 });
-
 
 document.getElementById('btn-save').addEventListener('click', async () => {
   const name = document.getElementById('input-name').value.trim();
   const phone = document.getElementById('input-phone').value.trim();
   const email = document.getElementById('input-email').value.trim();
 
-  
   if (!name || !phone) {
     alert('Nombre y teléfono son obligatorios');
     return;
@@ -92,7 +104,6 @@ document.getElementById('btn-save').addEventListener('click', async () => {
     alert('El teléfono solo puede contener números, espacios, +, - y paréntesis. Mínimo 7 dígitos.');
     return;
   }
-
 
   if (editingId) {
     await fetch(`${API}/${editingId}`, {
@@ -112,17 +123,6 @@ document.getElementById('btn-save').addEventListener('click', async () => {
   loadContacts();
 });
 
-
-
-function openEditModal(contact) {
-  editingId = contact.id;
-  document.getElementById('modal-title').textContent = 'Editar Contacto';
-  document.getElementById('input-name').value = contact.name;
-  document.getElementById('input-phone').value = contact.phone;
-  document.getElementById('input-email').value = contact.email || '';
-  document.getElementById('modal').classList.remove('hidden');
-}
-
 async function deleteContact(id) {
   if (confirm('¿Estás segura de que deseas eliminar este contacto?')) {
     await fetch(`${API}/${id}`, {
@@ -132,3 +132,4 @@ async function deleteContact(id) {
   }
 }
 
+loadContacts();
