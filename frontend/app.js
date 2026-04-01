@@ -57,3 +57,37 @@ document.getElementById('btn-nuevo').addEventListener('click', () => {
 
 loadContacts();
 
+let editingId = null;
+
+function openCreateModal() {
+  editingId = null;
+  document.getElementById('modal-title').textContent = 'Nuevo Contacto';
+  document.getElementById('input-name').value = '';
+  document.getElementById('input-phone').value = '';
+  document.getElementById('input-email').value = '';
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+document.getElementById('btn-cancel').addEventListener('click', () => {
+  document.getElementById('modal').classList.add('hidden');
+});
+
+document.getElementById('btn-save').addEventListener('click', async () => {
+  const name = document.getElementById('input-name').value.trim();
+  const phone = document.getElementById('input-phone').value.trim();
+  const email = document.getElementById('input-email').value.trim();
+
+  if (!name || !phone) {
+    alert('Nombre y teléfono son obligatorios');
+    return;
+  }
+
+  await fetch(API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, phone, email })
+  });
+
+  document.getElementById('modal').classList.add('hidden');
+  loadContacts();
+});
