@@ -1,0 +1,118 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  padding: 30px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 2rem;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.toolbar input {
+  padding: 10px 15px;
+  width: 300px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background-color: #2a2a2a;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.toolbar input::placeholder {
+  color: #888;
+}
+
+#btn-nuevo {
+  padding: 10px 20px;
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#btn-nuevo:hover {
+  background-color: #dddddd;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background-color: #2e2e2e;
+  border-radius: 12px;
+  padding: 20px;
+  position: relative;
+  cursor: pointer;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.card-name {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.card-info p {
+  font-size: 0.9rem;
+  color: #cccccc;
+  margin-bottom: 5px;
+}
+
+.card-info span {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.btn-delete {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  color: #ff4444;
+}
