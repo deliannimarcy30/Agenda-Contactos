@@ -17,9 +17,12 @@ async function loadContacts(search = '') {
 
   if (search) {
     contacts = contacts.filter(c =>
-      c.name.toLowerCase().includes(search.toLowerCase())
+      c.name.toLowerCase().includes(search.toLowerCase()) ||
+      c.phone.toLowerCase().includes(search.toLowerCase()) ||
+      (c.email && c.email.toLowerCase().includes(search.toLowerCase()))
     );
   }
+
 
   const grid = document.getElementById('contacts-grid');
   grid.innerHTML = '';
