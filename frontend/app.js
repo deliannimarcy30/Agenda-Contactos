@@ -72,6 +72,7 @@ document.getElementById('btn-cancel').addEventListener('click', () => {
   document.getElementById('modal').classList.add('hidden');
 });
 
+
 document.getElementById('btn-save').addEventListener('click', async () => {
   const name = document.getElementById('input-name').value.trim();
   const phone = document.getElementById('input-phone').value.trim();
@@ -82,12 +83,31 @@ document.getElementById('btn-save').addEventListener('click', async () => {
     return;
   }
 
-  await fetch(API, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, phone, email })
-  });
+  if (editingId) {
+    await fetch(`${API}/${editingId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, email })
+    });
+  } else {
+    await fetch(API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, email })
+    });
+  }
 
   document.getElementById('modal').classList.add('hidden');
   loadContacts();
 });
+
+
+
+function openEditModal(contact) {
+  editingId = contact.id;
+  document.getElementById('modal-title').textContent = 'Editar Contacto';
+  document.getElementById('input-name').value = contact.name;
+  document.getElementById('input-phone').value = contact.phone;
+  document.getElementById('input-email').value = contact.email || '';
+  document.getElementById('modal').classList.remove('hidden');
+}
