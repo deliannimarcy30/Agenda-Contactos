@@ -8,22 +8,74 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
-  <h1>
-    <i class="fa-regular fa-calendar-check"></i>
-    Agenda de Contactos
-  </h1>
 
-  <div class="toolbar">
-    <input type="text" id="search" placeholder="Buscar por nombre, teléfono o email..." />
-    <button id="btn-nuevo">
-      <i class="fa-solid fa-plus"></i> Nuevo Contacto
-    </button>
+  <!-- Pantalla de Login/Registro -->
+  <div id="auth-screen">
+    <div class="auth-container">
+
+      <!-- Panel izquierdo -->
+      <div class="auth-left" id="auth-left">
+        <div class="auth-left-content">
+          <i class="fa-regular fa-calendar-check auth-icon"></i>
+          <h2 id="auth-left-title">Bienvenido de nuevo</h2>
+          <p id="auth-left-subtitle">Inicia sesión para acceder a tu agenda personal</p>
+          <button class="btn-switch" id="btn-switch" onclick="switchPanel()">Registrarse</button>
+        </div>
+      </div>
+
+      <!-- Panel derecho -->
+      <div class="auth-right">
+
+        <!-- Login -->
+        <div id="form-login">
+          <h2 class="form-title">Iniciar Sesión</h2>
+          <input type="text" id="login-username" placeholder="Usuario" />
+          <input type="password" id="login-password" placeholder="Contraseña" />
+          <button class="btn-auth" onclick="login()">Entrar</button>
+          <p id="login-error" class="auth-error"></p>
+        </div>
+
+        <!-- Registro -->
+        <div id="form-register" class="hidden">
+          <h2 class="form-title">Crear cuenta</h2>
+          <input type="text" id="register-username" placeholder="Usuario" />
+          <input type="password" id="register-password" placeholder="Contraseña" />
+          <input type="password" id="register-confirm" placeholder="Confirmar contraseña" />
+          <button class="btn-auth" onclick="register()">Registrarse</button>
+          <p id="register-error" class="auth-error"></p>
+        </div>
+
+      </div>
+    </div>
   </div>
 
-  <p id="contact-count" class="contact-count"></p>
+  <!-- Pantalla Principal -->
+  <div id="main-screen" class="hidden">
+    <div class="top-bar">
+      <h1>
+        <i class="fa-regular fa-calendar-check"></i>
+        Agenda de Contactos
+      </h1>
+      <div class="user-info">
+        <span id="welcome-user"></span>
+        <button id="btn-logout" onclick="logout()">
+          <i class="fa-solid fa-right-from-bracket"></i> Salir
+        </button>
+      </div>
+    </div>
 
-  <div id="contacts-grid" class="grid"></div>
+    <div class="toolbar">
+      <input type="text" id="search" placeholder="Buscar por nombre, teléfono o email..." />
+      <button id="btn-nuevo" onclick="openCreateModal()">
+        <i class="fa-solid fa-plus"></i> Nuevo Contacto
+      </button>
+    </div>
 
+    <p id="contact-count" class="contact-count"></p>
+    <div id="contacts-grid" class="grid"></div>
+  </div>
+
+  <!-- Modal -->
   <div id="modal" class="modal-overlay hidden">
     <div class="modal">
       <h2 id="modal-title">Nuevo Contacto</h2>
@@ -39,4 +91,4 @@
 
   <script src="app.js"></script>
 </body>
-</html> 
+</html>

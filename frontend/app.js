@@ -1,6 +1,7 @@
 const API = 'http://localhost:3000/api/contacts';
+const AUTH = 'http://localhost:3000/api/auth';
 
-const colors = ['#f69a7b', '#f9db88', '#90c8f8', '#a7fcab', '#f8a4c0', '#e999f7'];
+const colors = ['#efa991', '#f6e0a3', '#99c9f3', '#c3ffc6', '#f9c3d5', '#ecb5f6'];
 
 function getColor(id) {
   return colors[id % colors.length];
@@ -10,8 +11,117 @@ function getInitial(name) {
   return name.charAt(0).toUpperCase();
 }
 
+function getToken() {
+  return localStorage.getItem('token');
+}
+
+function switchPanel() {
+  const isLogin = !document.getElementById('form-login').classList.contains('hidden');
+  const left = document.getElementById('auth-left-title');
+  const subtitle = document.getElementById('auth-left-subtitle');
+  const btnSwitch = document.getElementById('btn-switch');
+
+  if (isLogin) {
+    document.getElementById('form-login').classList.add('hidden');
+    document.getElementById('form-register').classList.remove('hidden');
+    left.textContent = '¿Ya tienes cuenta?';
+    subtitle.textContent = 'Inicia sesión para acceder a tu agenda';
+    btnSwitch.textContent = 'Iniciar Sesión';
+  } else {
+    document.getElementById('form-login').classList.remove('hidden');
+    document.getElementById('form-register').classList.add('hidden');
+    left.textContent = 'Bienvenido de nuevo';
+    subtitle.textContent = 'Inicia sesión para acceder a tu agenda personal';
+    btnSwitch.textContent = 'Registrarse';
+  }
+}
+
+async function login() {
+  const username = document.getElementById('login-username').value.trim();
+  const password = document.getElementById('login-password').value.trim();
+  const error = document.getElementById('login-error');
+
+  if (!username || !password) {
+    error.textContent = 'Completa todos los campos';
+    return;
+  }
+
+  const res = await fetch(`${AUTH}/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    error.textContent = data.error;
+    return;
+  }
+
+  localStorage.setItem('token', data.token);
+  localStorage.setItem('username', data.username);
+  showMainScreen();
+}
+
+async function register() {
+  const username = document.getElementById('register-username').value.trim();
+  const password = document.getElementById('register-password').value.trim();
+  const confirm = document.getElementById('register-confirm').value.trim();
+  const error = document.getElementById('register-error');
+
+  if (!username || !password || !confirm) {
+    error.textContent = 'Completa todos los campos';
+    return;
+  }
+
+  if (password !== confirm) {
+    error.textContent = 'Las contraseñas no coinciden';
+    return;
+  }
+
+  const res = await fetch(`${AUTH}/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    error.textContent = data.error;
+    return;
+  }
+
+  document.getElementById('register-error').style.color = '#4fc3f7';
+  error.textContent = 'Cuenta creada. Inicia sesión.';
+  switchPanel();
+}
+
+function logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('username');
+  document.getElementById('main-screen').classList.add('hidden');
+  document.getElementById('auth-screen').classList.remove('hidden');
+}
+
+function showMainScreen() {
+  document.getElementById('auth-screen').classList.add('hidden');
+  document.getElementById('main-screen').classList.remove('hidden');
+  document.getElementById('welcome-user').textContent = `Hola, ${localStorage.getItem('username')}`;
+  loadContacts();
+}
+
 async function loadContacts(search = '') {
-  const res = await fetch(API);
+  const res = await fetch(API, {
+    headers: { 'Authorization': `Bearer ${getToken()}` }
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    logout();
+    return;
+  }
+
   let contacts = await res.json();
 
   if (search) {
@@ -61,10 +171,6 @@ document.getElementById('search').addEventListener('input', (e) => {
   loadContacts(e.target.value);
 });
 
-document.getElementById('btn-nuevo').addEventListener('click', () => {
-  openCreateModal();
-});
-
 let editingId = null;
 
 function openCreateModal() {
@@ -108,13 +214,19 @@ document.getElementById('btn-save').addEventListener('click', async () => {
   if (editingId) {
     await fetch(`${API}/${editingId}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      },
       body: JSON.stringify({ name, phone, email })
     });
   } else {
     await fetch(API, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      },
       body: JSON.stringify({ name, phone, email })
     });
   }
@@ -126,10 +238,15 @@ document.getElementById('btn-save').addEventListener('click', async () => {
 async function deleteContact(id) {
   if (confirm('¿Estás segura de que deseas eliminar este contacto?')) {
     await fetch(`${API}/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${getToken()}` }
     });
     loadContacts();
   }
 }
 
-loadContacts();
+if (getToken()) {
+  showMainScreen();
+} else {
+  document.getElementById('auth-screen').classList.remove('hidden');
+} 
